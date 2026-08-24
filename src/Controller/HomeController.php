@@ -9,12 +9,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
-
-    #[Route(path: "/home", name: "Home")]
+    #[Route(path: "/", name: "Home")]
     function index(Request $request)
     {
 
-        // dd($request);
-        return new Response("Bonjour ". $request->query->get("nom"," à toi !!"));
+      return $this->render("/home/index.html.twig");
+
     }
 }
