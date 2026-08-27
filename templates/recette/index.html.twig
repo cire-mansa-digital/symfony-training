@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Mes Recettes
+{% endblock %}
+
+
+{% block body %}
+
+	<div class="mt-20">
+		<h1 class=" text-6xl text-center">
+			Mes Recettes
+		</h1>
+        <p class="ms-10 mb-10 me-30" >
+            Labore ex velit pariatur eu ullamco occaecat nisi anim cillum dolore laboris elit est. Occaecat magna et sunt est aliqua occaecat. Excepteur occaecat occaecat officia est qui dolore tempor sunt ipsum incididunt anim laboris. Consectetur do exercitation incididunt do proident ea ullamco minim. Sunt sunt culpa exercitation irure.
+        </p>
+
+		<ul class="mt-2 flex ">
+            {% for recipe in recipes %}
+                <li class="ms-10 me-10   bg-amber-600 p-5 rounded-2xl hover:cursor-pointer  " >
+                    <a href="{{ path('recette.show', {slug:recipe.slug,id:recipe.id}) }}" class="text-white hover:text-[#B80000]" > {{ recipe.title }} </a>
+                </li>
+            {% endfor %}
+		</ul>
+	</div>
+
+{% endblock %}
