@@ -1,0 +1,10 @@
+{% for type, messages in app.flashes %}
+	<div class="flex items-center mt-20 justify-center">
+		<div class=" {{ type =='success' ? 'bg-green-300' : 'bg-red-300 '}} rounded  text-center px-100 py-5">
+			<p>
+				{{ messages | join('.') }}
+			</p>
+		</div>
+	</div>
+
+{% endfor %}

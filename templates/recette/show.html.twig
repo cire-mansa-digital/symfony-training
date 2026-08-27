@@ -1,18 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Recette :   {{ recipe.slug }}-{{recipe.id}}  {% endblock %}
+{% block title %}Recette : {{ recipe.title }}{% endblock %}
 
 {% block body %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-16">
+    <div class="max-w-4xl mx-auto">
 
 
+        <div class="mb-6">
+            <a href="{{ path('recette.index') }}"
+               class="inline-flex items-center gap-2 text-amber-600 hover:text-amber-800 transition">
+                ← Retour à la liste des recettes
+            </a>
+        </div>
 
-    <div class="mt-30">
-        <h1 class="text-5xl text-center ">  {{ recipe.title   }}    </h1>
-        <p class="ms-40 me-30 mt-5" >
-            {{ recipe.content }}
-        </p>
+        {# Carte principale #}
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
 
+            {# En-tête avec badge durée #}
+            <div class="bg-linear-to-r from-amber-500 to-orange-500 px-8 py-6">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-white">
+                        {{ recipe.title }}
+                    </h1>
+                    <div class="flex items-center gap-3">
+                        <span class="inline-flex items-center gap-1 px-4 py-2 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-full">
+                             {{ recipe.duration }} min
+                        </span>
+                    </div>
+                </div>
+
+                {# Slug en sous-titre #}
+                <p class="text-white/70 text-sm mt-2">
+                     {{ recipe.slug }}
+                </p>
+            </div>
+
+            {# Contenu #}
+            <div class="px-8 py-6">
+                {# Métadonnées (dates) #}
+                <div class="flex flex-wrap gap-6 text-sm text-gray-500 border-b border-gray-100 pb-4 mb-6">
+                    <span class="flex items-center gap-1">
+                         Créée le : {{ recipe.createdAt|date('d/m/Y à H:i') }}
+                    </span>
+                    {% if recipe.updateAt %}
+                        <span class="flex items-center gap-1">
+                             Modifiée le : {{ recipe.updateAt|date('d/m/Y à H:i') }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+                {# Description / Contenu #}
+                <div class="prose prose-lg max-w-none">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3"> Description</h2>
+                    <div class="text-gray-700 leading-relaxed whitespace-pre-line">
+                        {{ recipe.content|nl2br }}
+                    </div>
+                </div>
+
+                {# Actions (modifier / supprimer) #}
+                <div class="flex flex-wrap gap-4 mt-8 pt-6 border-t border-gray-200">
+                    <a href="{{ path('recette.edit', {id: recipe.id}) }}"
+                       class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition shadow-sm">
+                         Modifier
+                    </a>
+
+                    <form action="{{ path('recette.delete', {id: recipe.id}) }}"
+                          method="post"
+                          onsubmit="return confirm('Supprimer définitivement cette recette ?')"
+                          class="inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recipe.id) }}">
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-6 py-2.5 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition shadow-sm">
+                             Supprimer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {# Footer de la page #}
+        <div class="mt-8 text-center text-sm text-gray-400">
+            Recette App — Tous droits réservés
+        </div>
     </div>
-
-
+</div>
 {% endblock %}

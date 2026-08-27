@@ -5,5 +5,7 @@
 
 @import "tailwindcss";
 
-@source "../templates";         /* Où se trouvent vos fichiers Twig */
+@source "../templates";       
 @source not "../../public";     /* Exclut le dossier public */
+@plugin "@tailwindcss/forms";
+@source "../../vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig";

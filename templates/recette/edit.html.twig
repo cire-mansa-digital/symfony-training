@@ -11,6 +11,15 @@
 		<h1 class=" text-6xl text-center">
 			Modification de  Recette
 		</h1>
+        <div class="ms-20 me-30" >
+            {{ form_start(form) }}
+            <div class="flex" >
+                {{ form_row(form.title) }}
+                {{ form_row(form.slug) }}
+            </div>
+            
+            {{ form_end(form) }}
+        </div>
 	</div>
 
 {% endblock %}
