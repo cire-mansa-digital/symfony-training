@@ -3,11 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\RecipeRepository;
-use BcMath\Number;
+use App\Validator\BadRecette;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
+#[UniqueEntity(fields:'title')]
+#[UniqueEntity(fields:'slug')]
 class Recipe
 {
     #[ORM\Id]
@@ -16,15 +20,20 @@ class Recipe
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
+    #[Assert\Length(min: 3)]
+    #[BadRecette()]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Regex('/^[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*$/', " Le slug est invalide ")]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::INTEGER , nullable:true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    // #[Assert\Positive(message:'la dure doit etre positive')]
+    // #[Assert\LessThan(value:'1140', message: 'la duree maximale est 24h')]
     private ?int $duration = null;
 
     #[ORM\Column]
