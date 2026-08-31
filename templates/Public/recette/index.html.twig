@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes nos recettes — Recette App{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-16">
+    <div class="max-w-7xl mx-auto">
+
+        {# En-tête #}
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">
+                 Toutes nos recettes
+            </h1>
+            <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">
+                Découvrez notre sélection de recettes authentiques, testées et approuvées par la communauté.
+            </p>
+        </div>
+
+        {# Grille des recettes #}
+        {% if recipes is not empty %}
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {% for recipe in recipes %}
+                    <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-amber-200">
+                        <div class="p-6">
+                            <h2 class="text-xl font-bold text-gray-800 group-hover:text-amber-600 transition">
+                                <a href="{{ path('recipe.show', {slug: recipe.slug, id: recipe.id}) }}">
+                                    {{ recipe.title }}
+                                </a>
+                            </h2>
+                            <div class="flex items-center gap-3 mt-2 text-sm text-gray-500">
+                                <span class="inline-flex items-center gap-1">
+                                     {{ recipe.duration }} min
+                                </span>
+                                <span>•</span>
+                                <span> {{ recipe.id }}</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+                                {{ recipe.content|striptags|slice(0, 120) }}…
+                            </p>
+                            <div class="mt-4">
+                                <a href="{{ path('recipe.show', {slug: recipe.slug, id: recipe.id}) }}"
+                                   class="inline-flex items-center gap-1 text-amber-600 font-medium hover:text-amber-800 transition">
+                                    Voir la recette →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-16">
+                <span class="text-6xl block mb-4"></span>
+                <p class="text-gray-500 text-lg">Aucune recette disponible pour le moment.</p>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Recipe;
 use App\Form\RecipeType;
@@ -12,9 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+
+#[Route("/admin/recipe", name:"admin.recipe.")]
 final class RecetteController extends AbstractController
 {
-    #[Route('/recette', name: 'recette.index')]
+    #[Route('/', name: 'index')]
     public function index(RecipeRepository $repository, EntityManagerInterface $em): Response
     {
         $recipes = $repository->findAll();
@@ -57,13 +59,13 @@ final class RecetteController extends AbstractController
         // dd($repository->findByDurationShort(15 ));
         //  dd($em->getRepository(Recipe::class)->totalDuration());
         // dd($recipes);
-        return $this->render('recette/index.html.twig', [
+        return $this->render('Admin/recette/index.html.twig', [
             "recipes" => $recipes
         ]);
     }
 
 
-    #[Route(path: '/recette/{slug}-{id}', name: 'recette.show', requirements: ['id' => '\d+', 'slug' => '[a-z0-9-]+'])]
+    #[Route(path: '/{slug}-{id}', name: 'show', requirements: ['id' => '\d+', 'slug' => '[a-z0-9-]+'])]
     public function show(Request $request, int $id, string $slug, RecipeRepository $repository): Response
     {
 
@@ -72,13 +74,13 @@ final class RecetteController extends AbstractController
             return $this->redirectToRoute('recette.show', ['id' => $id, 'slug' => $recipe->getSlug()]);
         }
 
-        return $this->render('recette/show.html.twig', [
+        return $this->render('Admin/recette/show.html.twig', [
             'recipe' => $recipe
         ]);
     }
 
 
-    #[Route(path:'/recette/new', name:'recette.new', methods:['GET','POST'] )]
+    #[Route(path:'/new', name:'new', methods:['GET','POST'] )]
     public function create(Request $request, EntityManagerInterface $em){
 
     $recipe =  new Recipe();
@@ -93,7 +95,7 @@ final class RecetteController extends AbstractController
         return $this->redirectToRoute('recette.index');
     }
 
-      return $this->render('recette/create.html.twig',
+      return $this->render('Admin/recette/create.html.twig',
       [
         'form'=> $form
       ]
@@ -101,7 +103,7 @@ final class RecetteController extends AbstractController
     }
 
 
-    #[Route(path:'/recette/{id}/edit', name:'recette.edit', methods: ['POST','PATCH','GET'])]
+    #[Route(path:'{id}/edit', name:'edit', methods: ['POST','PATCH','GET'])]
     public function edit (Request $request , Recipe $recipe, EntityManagerInterface $em  ){
      $form = $this->createForm(RecipeType::class, $recipe);
      $form->handleRequest($request);
@@ -110,10 +112,10 @@ final class RecetteController extends AbstractController
          $em->persist($recipe);
          $em->flush();
          $this->addFlash('success','Recette modifié avec success');
-         return $this->redirectToRoute('recette.index');
+         return $this->redirectToRoute('admin.recette.index');
      }
     // dd($recipe);
-     return $this->render('recette/edit.html.twig',
+     return $this->render('Admin/recette/edit.html.twig',
         [
             'form'=> $form,
             'recipe' => $recipe
@@ -121,13 +123,13 @@ final class RecetteController extends AbstractController
      );
     }
 
-    #[Route(path:"/recette/{id}/delete", name: 'recette.delete', methods: ['DELETE'])]
+    #[Route(path:"{id}/delete", name: 'delete', methods: ['DELETE'])]
     public function delete (  Request $request , Recipe $recipe, EntityManagerInterface $em ){
          $em->remove($recipe);
          $em->flush();
          $this->addFlash('success','Recette supprimé avec succes');
-         return $this->redirectToRoute('recette.index');
+         return $this->redirectToRoute('admin.recette.index');
     }
 
-    
+
 }

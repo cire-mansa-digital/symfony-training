@@ -1,7 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends 'Admin/adminbase.html.twig' %}
 
 {% block title %}
-    Modification de recette
+    Créer une nouvelle recette
 {% endblock %}
 
 {% block body %}
@@ -11,7 +11,7 @@
             {# En-tête #}
             <div class="text-center mb-2">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">
-                    Modification de recette
+                    Créer une nouvelle recette
                 </h1>
                 <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">
                     Partagez votre recette avec la communauté. Remplissez tous les champs et laissez parler votre créativité !
@@ -20,7 +20,7 @@
 
             {# Lien retour vers la liste #}
             <div class="mb-2">
-                <a href="{{ path('recette.index') }}"
+                <a href="{{ path('admin.recipe.index') }}"
                     class="text-amber-600 hover:text-amber-800 transition font-medium">
                     ← Retour à la liste des recettes
                 </a>

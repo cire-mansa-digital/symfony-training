@@ -1,19 +1,17 @@
-{% extends 'base.html.twig' %}
+{% extends 'Admin/adminbase.html.twig' %}
 
-{% block title %}Mes Recettes
+{% block title %}Mes Categories
 {% endblock %}
 
 {% block body %}
 	<div class="mt-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
 		<h1 class="text-5xl font-extrabold text-center text-gray-900 mb-4">
-			Mes Recettes
+			Mes Catégories de  Recettes
 		</h1>
-		<p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-			Découvrez toutes vos recettes préférées. Cliquez sur une recette pour la voir en détail.
-		</p>
+
 		<div class="mt-8 text-center flex  mb-2">
-			<a href="{{ path('recette.new') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition shadow-lg">
-				Créer une nouvelle recette
+			<a href="{{ path('admin.category.new') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition shadow-lg">
+				Créer une nouvelle catégorie
 			</a>
 		</div>
 		<div class="overflow-hidden rounded-2xl shadow-xl mb-5  bg-white">
@@ -21,10 +19,10 @@
 				<thead class="bg-linear-to-r from-amber-500 to-orange-500">
 					<tr>
 						<th scope="col" class="px-6 py-4 text-left text-sm font-semibold  uppercase tracking-wider">
-							Recette
+							Catégorie
 						</th>
 						<th scope="col" class="px-6 py-4 text-left text-sm font-semibold  uppercase tracking-wider">
-							Durée
+							slug
 						</th>
 						<th scope="col" class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">
 							Actions
@@ -32,25 +30,25 @@
 					</tr>
 				</thead>
 				<tbody class="bg-white divide-y divide-gray-200">
-					{% for recipe in recipes %}
+					{% for cat in category %}
 						<tr class="hover:bg-amber-50 transition duration-200">
 							<td class="px-6 py-4 whitespace-nowrap">
-								<a href="{{ path('recette.show', {slug: recipe.slug, id: recipe.id}) }}" class="text-lg font-medium text-gray-900 hover:text-amber-600 hover:underline transition">
-									{{ recipe.title }}
+								<a hrefgit="{{ path('admin.category.show', {slug: cat.slug, id: cat.id}) }}" class="text-lg font-medium text-gray-900 hover:text-amber-600 hover:underline transition">
+									{{ cat.name }}
 								</a>
 							</td>
 							<td class="px-6 py-4 whitespace-nowrap">
 								<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
-									{{ recipe.duration }}
-									min
+									{{ cat.slug }}
+								
 								</span>
 							</td>
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="flex items-center gap-4">
-									<a href="{{ path('recette.edit', {id: recipe.id}) }}" class="inline-flex  items-center gap-1 px-3 py-1.5 bg-blue-500  text-sm font-medium rounded-lg hover:bg-blue-600 transition shadow-sm">
+									<a href="{{ path('admin.category.edit', {id: cat.id, slug:cat.slug}) }}" class="inline-flex  items-center gap-1 px-3 py-1.5 bg-blue-500  text-sm font-medium rounded-lg hover:bg-blue-600 transition shadow-sm">
 										Modifier
 									</a>
-									<form action=" {{ path("recette.delete", {id:recipe.id}) }} " method="post" >
+									<form action=" {{ path("admin.category.delete", {id:cat.id, slug:cat.slug}) }} " method="post" >
                                         <input hidden name="_method" value="DELETE" ></input>
 										<button onclick="return confirm('Supprimer cette recette ?')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-500  text-sm font-medium rounded-lg hover:bg-red-600 transition shadow-sm">
 											Supprimer
@@ -63,7 +61,7 @@
 						<tr>
 							<td colspan="3" class="px-6 py-12 text-center text-gray-500">
 								<span class="text-4xl block mb-2"></span>
-								Aucune recette trouvée.
+								Aucune catégorie trouvée.
 								<a href="#" class="text-amber-600 hover:underline">Créez-en une !</a>
 							</td>
 						</tr>
