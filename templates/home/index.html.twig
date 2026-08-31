@@ -1,11 +1,97 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Acceuil
-{% endblock %}
+{% block title %}Accueil - Recette App{% endblock %}
 
 {% block body %}
-	<h1 class="text-3xl mt-20 text-center  text-green-500 font-bold ">
-		Page d'Acceuil
-	</h1>
+<div class="min-h-screen bg-gray-50">
+
+    {# ============================================ #}
+    {# 1. HERO (section principale)                  #}
+    {# ============================================ #}
+    <section class="relative bg-linear-to-r from-amber-600 to-orange-500 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
+                         La cuisine <br/>à portée de clic
+                    </h1>
+                    <p class="mt-4 text-lg md:text-xl text-white/90 max-w-lg">
+                        Découvrez des recettes authentiques, testées et approuvées par notre communauté.
+                        Partagez vos créations culinaires et inspirez-vous.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <a href="{{ path('recette.index') }}"
+                           class="px-8 py-3 bg-white text-amber-600 font-semibold rounded-full shadow-lg hover:bg-amber-50 transition">
+                            Voir les recettes →
+                        </a>
+                        <a href="{{ path('recette.new') }}"
+                           class="px-8 py-3 bg-amber-700 text-white font-semibold rounded-full shadow-lg hover:bg-amber-800 transition">
+                         Créer une recette
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex justify-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png"
+                         alt="Cuisine illustration"
+                         class="w-64 h-64 object-contain">
+                </div>
+            </div>
+        </div>
+
+        {# Vague décorative en bas #}
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 120L48 100C96 80 192 40 288 30C384 20 480 40 576 50C672 60 768 60 864 50C960 40 1056 20 1152 20C1248 20 1344 40 1392 50L1440 60V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0Z"
+                      fill="#F9FAFB"/>
+            </svg>
+        </div>
+    </section>
+
+    {% if latestRecipes is defined and latestRecipes is not empty %}
+    <section class="bg-white py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">
+                     Dernières recettes
+                </h2>
+                <a href="{{ path('recette.index') }}"
+                   class="text-amber-600 hover:text-amber-800 font-medium">
+                    Voir toutes →
+                </a>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for recipe in latestRecipes %}
+                    <div class="bg-gray-50 hover:pointer-coarse: rounded-xl p-6 shadow-sm hover:shadow-md transition border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            <a href="{{ path('recette.show', {slug: recipe.slug, id: recipe.id}) }}"
+                               class="hover:text-amber-600 transition">
+                                {{ recipe.title }}
+                            </a>
+                        </h3>
+                        <div class="flex items-center gap-3 mt-2 text-sm text-gray-500">
+                            <span> {{ recipe.duration }} min</span>
+                            <span>•</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2 line-clamp-2">
+                            {{ recipe.content|striptags|slice(0, 80) }}…
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-400">
+            <p>© {{ "now"|date("Y") }} Recette App </p>
+            <div class="mt-2 flex justify-center gap-6">
+                <a href="{{ path('contact') }}" class="hover:text-white transition">Contact</a>
+            </div>
+        </div>
+    </footer>
+</div>
 {% endblock %}

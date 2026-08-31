@@ -128,4 +128,6 @@ final class RecetteController extends AbstractController
          $this->addFlash('success','Recette supprimé avec succes');
          return $this->redirectToRoute('recette.index');
     }
+
+    
 }

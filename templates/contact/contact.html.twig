@@ -1,15 +1,93 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contactez-nous
+{% block title %}
+    Contactez-nous
 {% endblock %}
 
 {% block body %}
+    <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-16">
+        <div
+        class="max-w-4xl mx-auto">
 
-	<div class="mt-20 ms-20 me-40 ">
-        <h1 class=" text-6xl text-center">
-			Contactez-Nous
-		</h1>
-		{{ form(form) }}
-	</div>
+        {# En-tête #}
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">
+                Contactez-nous
+            </h1>
+            <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">
+                Une question, une suggestion ? Nous sommes à l'écoute. Remplissez le formulaire et nous vous répondrons dans les plus brefs délais.
+            </p>
+        </div>
+
+        {# Carte du formulaire #}
+        <div
+        class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+
+        {# En-tête de la carte avec dégradé #}
+        <div class="bg-linear-to-r from-amber-600 to-orange-500 px-8 py-4">
+            <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+                Formulaire de contact
+            </h2>
+        </div>
+
+        {# Corps du formulaire #}
+        <div class="px-8 py-8">
+            {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    {{ form_label(form.name, 'Nom complet', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                    {{ form_widget(form.name, { attr: {
+                    class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
+                    placeholder: 'Votre nom...'
+                    } }) }}
+                    {{ form_errors(form.name, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+                </div>
+                <div>
+                    {{ form_label(form.email, 'Adresse email', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                    {{ form_widget(form.email, { attr: {
+                    class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
+                    placeholder: 'votre@email.com'
+                    } }) }}
+                    {{ form_errors(form.email, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.message, 'Message', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                {{ form_widget(form.message, { attr: {
+                class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
+                rows: 6,
+                placeholder: 'Décrivez-nous votre demande...'
+                } }) }}
+                {{ form_errors(form.message, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+            </div>
+            <div>
+                {{ form_label(form.service, 'Service', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                {{ form_widget(form.service, { attr: {
+                class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
+                placeholder: 'Choisissez le service'
+                } }) }}
+                {{ form_errors(form.service, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+
+
+                <div class="flex justify-end pt-4">
+                    {{ form_widget(form.save, {
+                    label: 'Envoyer le message',
+                    attr: {
+                    class: 'inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-500 text-white font-semibold rounded-full shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5',
+                    }}) }}
+                     {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+    </div>
+
 
 {% endblock %}

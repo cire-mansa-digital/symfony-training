@@ -19,9 +19,9 @@ final class ContactController extends AbstractController
     public function index(Request $request, MailerInterface $mailer): Response
     {
         $contact = new ContactDTO();
-        $contact->email =  'cire@gmail.com';
-        $contact->name = 'Diallo';
-        $contact->message = 'Lorem lorem lorememe ';
+        $contact->email =  '';
+        $contact->name = '';
+        $contact->message = '';
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
 
