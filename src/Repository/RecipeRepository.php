@@ -43,9 +43,13 @@ class RecipeRepository extends ServiceEntityRepository
 
     public function findByDurationShort(int $duration) : array{
          return $this->createQueryBuilder("r")
+        //  ->select('r','c')
+        //  ->leftJoin("r.category","c")
          ->where("r.duration <= :duration")
+        //  ->where("c.slug = :cat")
          ->orderBy("r.duration","ASC")
          ->setParameter("duration",$duration)
+        //  ->setParameter("cat",'dessert-au-repo')
          ->setMaxResults(2)
          ->getQuery()
          ->getResult();

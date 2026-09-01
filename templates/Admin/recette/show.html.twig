@@ -8,7 +8,7 @@
 
 
         <div class="mb-6">
-            <a href="{{ path('recette.index') }}"
+            <a href="{{ path('admin.recipe.index') }}"
                class="inline-flex items-center gap-2 text-amber-600 hover:text-amber-800 transition">
                 ← Retour à la liste des recettes
             </a>
@@ -61,12 +61,12 @@
 
                 {# Actions (modifier / supprimer) #}
                 <div class="flex flex-wrap gap-4 mt-8 pt-6 border-t border-gray-200">
-                    <a href="{{ path('recette.edit', {id: recipe.id}) }}"
+                    <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}"
                        class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition shadow-sm">
                          Modifier
                     </a>
 
-                    <form action="{{ path('recette.delete', {id: recipe.id}) }}"
+                    <form action="{{ path('admin.recipe.delete', {id: recipe.id}) }}"
                           method="post"
                           onsubmit="return confirm('Supprimer définitivement cette recette ?')"
                           class="inline">
@@ -80,10 +80,6 @@
             </div>
         </div>
 
-        {# Footer de la page #}
-        <div class="mt-8 text-center text-sm text-gray-400">
-            Recette App — Tous droits réservés
-        </div>
     </div>
 </div>
 {% endblock %}

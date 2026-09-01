@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Entity\Recipe;
 use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
@@ -21,44 +22,21 @@ final class RecetteController extends AbstractController
     {
         $recipes = $repository->findAll();
 
-        //  Ajout d'une nouvelle recette
-        // $nrecip = new Recipe();
-        // $nrecip->setTitle('Mafé Hakhobantara');
-        // $nrecip->setContent("Créations culinaires exquises utilisant des ingrédients frais d'origine locale et des recettes authentiques. Nos chefs talentueux élaborent des plats exceptionnels qui célèbrent des saveurs diverses et des traditions culinaires. Chaque repas est un voyage à travers le goût, la texture et l'excellence de la présentation.");
-        // $nrecip->setSlug("maffe-hakhobantara");
-        // $nrecip->setCreatedAt(new \DateTimeImmutable());
-        // $nrecip->setUpdateAt (new \DateTimeImmutable());
+        // $category = $em->getRepository(Category::class)->findAll()[1];
+        $rec = $em->getRepository(Recipe::class)->find(5);
 
-        // $em->persist($nrecip);
+        // $rec->setCategory($category);
+
+        // $em->persist($rec);
         // $em->flush();
 
-        //  Modification d'une recette
-        // $rcp = $repository->find(5);
-
-        // dump($rcp);
-
-        // $rcp->setDuration(5);
-        // $em->flush();
-
-        // dump($rcp);
+        // dd($rec->getCategory()->getName());
 
 
 
-// Suppresion
-
-        // $recp = $repository->find(4);
-        // dump($recipes);
-        // // $em->remove($recp);
 
 
-        // // $em->flush();
 
-
-        // dump($recipes);
-
-        // dd($repository->findByDurationShort(15 ));
-        //  dd($em->getRepository(Recipe::class)->totalDuration());
-        // dd($recipes);
         return $this->render('Admin/recette/index.html.twig', [
             "recipes" => $recipes
         ]);
@@ -71,7 +49,7 @@ final class RecetteController extends AbstractController
 
         $recipe = $repository->find($id);
         if ($recipe->getSlug() != $slug) {
-            return $this->redirectToRoute('recette.show', ['id' => $id, 'slug' => $recipe->getSlug()]);
+            return $this->redirectToRoute('admin.recipe.show', ['id' => $id, 'slug' => $recipe->getSlug()]);
         }
 
         return $this->render('Admin/recette/show.html.twig', [
@@ -92,7 +70,7 @@ final class RecetteController extends AbstractController
         $em->persist($recipe);
         $em->flush();
         $this->addFlash('success','Recette crée avec success');
-        return $this->redirectToRoute('recette.index');
+        return $this->redirectToRoute('admin.recipe.index');
     }
 
       return $this->render('Admin/recette/create.html.twig',
@@ -112,7 +90,7 @@ final class RecetteController extends AbstractController
          $em->persist($recipe);
          $em->flush();
          $this->addFlash('success','Recette modifié avec success');
-         return $this->redirectToRoute('admin.recette.index');
+         return $this->redirectToRoute('admin.recipe.index');
      }
     // dd($recipe);
      return $this->render('Admin/recette/edit.html.twig',
@@ -128,7 +106,7 @@ final class RecetteController extends AbstractController
          $em->remove($recipe);
          $em->flush();
          $this->addFlash('success','Recette supprimé avec succes');
-         return $this->redirectToRoute('admin.recette.index');
+         return $this->redirectToRoute('admin.recipe.index');
     }
 
 
