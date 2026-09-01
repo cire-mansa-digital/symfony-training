@@ -9,12 +9,15 @@ use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 
-#[Route("/admin/recipe", name:"admin.recipe.")]
+
+#[Route("/admin/recipe", name: "admin.recipe.")]
 final class RecetteController extends AbstractController
 {
     #[Route('/', name: 'index')]
@@ -58,56 +61,84 @@ final class RecetteController extends AbstractController
     }
 
 
-    #[Route(path:'/new', name:'new', methods:['GET','POST'] )]
-    public function create(Request $request, EntityManagerInterface $em){
+    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
+    public function create(Request $request, EntityManagerInterface $em)
+    {
 
-    $recipe =  new Recipe();
-    $form = $this->createForm(RecipeType::class,$recipe );
-    $form->handleRequest($request);
-    if($form->isSubmitted() && $form->isValid()){
-        // $recipe->setCreatedAt(new \DateTimeImmutable());
-        // $recipe->setUpdateAt(new \DateTimeImmutable());
-        $em->persist($recipe);
+
+        $recipe =  new Recipe();
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // /**
+            //  * @var  UploadedFile $image
+            //  */
+            // $image = $form->get('imageFile')->getData();
+
+            // $imageName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME ) .''. $image->getClientOriginalExtension();
+            // // dd($imageName);
+            // $recipe->setImage($imageName);
+            // $image->move($this->getParameter('kernel.project_dir'). '/public/images/recipe/', $imageName);
+
+            $em->persist($recipe);
+            $em->flush();
+            $this->addFlash('success', 'Recette crée avec success');
+            return $this->redirectToRoute('admin.recipe.index');
+        }
+
+        return $this->render(
+            'Admin/recette/create.html.twig',
+            [
+                'form' => $form
+            ]
+        );
+    }
+
+
+    #[Route(path: '{id}/edit', name: 'edit', methods: ['POST', 'PATCH', 'GET'])]
+    public function edit(Request $request, Recipe $recipe, EntityManagerInterface $em, UploaderHelper $uploaderHelper)
+    {
+
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $imageUrl = $uploaderHelper->asset($recipe, 'imageFile');
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // dd($form->getData());
+            // $recipe->setUpdateAt(new \DateTimeImmutable());
+
+            // /**
+            //  * @var  UploadedFile $image
+            //  */
+            // $image = $form->get('imageFile')->getData();
+
+            // $imageName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME ) .'.'. $image->getClientOriginalExtension();
+            // // dd($imageName);
+            // $recipe->setImage($imageName);
+            // $image->move($this->getParameter('kernel.project_dir'). '/public/images/recipe/', $imageName);
+
+            $em->persist($recipe);
+            $em->flush();
+            $this->addFlash('success', 'Recette modifié avec success');
+            return $this->redirectToRoute('admin.recipe.index');
+        }
+        // dd($recipe);
+        return $this->render(
+            'Admin/recette/edit.html.twig',
+            [
+                'form' => $form,
+                'recipe' => $recipe,
+                'url'=> $imageUrl
+            ]
+        );
+    }
+
+    #[Route(path: "{id}/delete", name: 'delete', methods: ['DELETE'])]
+    public function delete(Request $request, Recipe $recipe, EntityManagerInterface $em)
+    {
+        $em->remove($recipe);
         $em->flush();
-        $this->addFlash('success','Recette crée avec success');
+        $this->addFlash('success', 'Recette supprimé avec succes');
         return $this->redirectToRoute('admin.recipe.index');
     }
-
-      return $this->render('Admin/recette/create.html.twig',
-      [
-        'form'=> $form
-      ]
-      );
-    }
-
-
-    #[Route(path:'{id}/edit', name:'edit', methods: ['POST','PATCH','GET'])]
-    public function edit (Request $request , Recipe $recipe, EntityManagerInterface $em  ){
-     $form = $this->createForm(RecipeType::class, $recipe);
-     $form->handleRequest($request);
-     if ($form->isSubmitted() && $form->isValid()) {
-        // $recipe->setUpdateAt(new \DateTimeImmutable());
-         $em->persist($recipe);
-         $em->flush();
-         $this->addFlash('success','Recette modifié avec success');
-         return $this->redirectToRoute('admin.recipe.index');
-     }
-    // dd($recipe);
-     return $this->render('Admin/recette/edit.html.twig',
-        [
-            'form'=> $form,
-            'recipe' => $recipe
-        ]
-     );
-    }
-
-    #[Route(path:"{id}/delete", name: 'delete', methods: ['DELETE'])]
-    public function delete (  Request $request , Recipe $recipe, EntityManagerInterface $em ){
-         $em->remove($recipe);
-         $em->flush();
-         $this->addFlash('success','Recette supprimé avec succes');
-         return $this->redirectToRoute('admin.recipe.index');
-    }
-
-
 }

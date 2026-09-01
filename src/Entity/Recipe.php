@@ -7,11 +7,16 @@ use App\Validator\BadRecette;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
+
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[UniqueEntity(fields:'title')]
 #[UniqueEntity(fields:'slug')]
+ #[Vich\Uploadable]
 class Recipe
 {
     #[ORM\Id]
@@ -44,6 +49,14 @@ class Recipe
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     private ?Category $category = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[Assert\Image()]
+    #[Vich\UploadableField(mapping:'recipes', fileNameProperty: 'image')]
+
+    private ?File $imageFile = null;
 
     public function getId(): ?int
     {
@@ -130,6 +143,34 @@ class Recipe
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of imageFile
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+
+    public function setImageFile(File $imageFile) : static
+    {
+        $this->imageFile = $imageFile;
 
         return $this;
     }

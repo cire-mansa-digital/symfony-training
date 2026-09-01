@@ -93,6 +93,15 @@
                         {{ form_errors(form.category, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
                     </div>
 
+                    <div>
+                        {{ form_label(form.imageFile, 'Photo de la recette', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                        {{ form_widget(form.imageFile, {attr:  { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition' }}) }}
+                        {{ form_help(form.imageFile, { attr: { class: 'text-sm text-gray-500 mt-1' } }) }}
+                        {{ form_errors(form.imageFile, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+
+
+                    </div>
+
 
                     {# Bouton d'envoi #}
                     <div class="flex justify-end pt-4">
