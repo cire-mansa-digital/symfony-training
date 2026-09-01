@@ -81,7 +81,7 @@ final class CategoryController extends AbstractController
 
 
         return $this->render(
-            'Admin/category/create.html.twig',
+            'Admin/category/edit.html.twig',
             [
                 'category' => $category,
                 'form' => $form

@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -26,6 +27,7 @@ class CategoryType extends AbstractType
             ->add('slug', TextType::class, [
                 'required'=>false
             ])
+            ->add('description', TextareaType::class)
             ->add('save', SubmitType::class, [
                 'label' => 'Ajouter'
             ])
