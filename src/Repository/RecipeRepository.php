@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Recipe;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Recipe>
@@ -41,24 +43,36 @@ class RecipeRepository extends ServiceEntityRepository
     //        ;
     //    };
 
-    public function findByDurationShort(int $duration) : array{
-         return $this->createQueryBuilder("r")
-        //  ->select('r','c')
-        //  ->leftJoin("r.category","c")
-         ->where("r.duration <= :duration")
-        //  ->where("c.slug = :cat")
-         ->orderBy("r.duration","ASC")
-         ->setParameter("duration",$duration)
-        //  ->setParameter("cat",'dessert-au-repo')
-         ->setMaxResults(2)
-         ->getQuery()
-         ->getResult();
+    public function findByDurationShort(int $duration): array
+    {
+        return $this->createQueryBuilder("r")
+            //  ->select('r','c')
+            //  ->leftJoin("r.category","c")
+            ->where("r.duration <= :duration")
+            //  ->where("c.slug = :cat")
+            ->orderBy("r.duration", "ASC")
+            ->setParameter("duration", $duration)
+            //  ->setParameter("cat",'dessert-au-repo')
+            ->setMaxResults(2)
+            ->getQuery()
+            ->getResult();
     }
 
-    public function totalDuration(){
+    public function  paginateRecipe(int $page, int $limit): Paginator
+    {
+
+        $query = $this->createQueryBuilder('r')
+            ->setFirstResult(($page - 1)* $limit)
+            ->setMaxResults($limit);
+
+        return  new Paginator($query);
+    }
+
+    public function totalDuration()
+    {
         return $this->createQueryBuilder("r")
-        ->select("SUM(r.duration) as total")
-        ->getQuery()
-        ->getScalarResult();
+            ->select("SUM(r.duration) as total")
+            ->getQuery()
+            ->getScalarResult();
     }
 }

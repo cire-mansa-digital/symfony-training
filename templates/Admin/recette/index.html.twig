@@ -79,8 +79,20 @@
 					{% endfor %}
 				</tbody>
 			</table>
+
 		</div>
 
-
+            <div class="flex justify-between " >
+                {% if page > 1 %}
+                     <div>
+                        <a class="" href="{{path('admin.recipe.index', {page: page - 1})}}" >Précendent</a>
+                     </div>
+                {% endif %}
+                {% if page < maxPage %}
+                     <div>
+                        <a href="{{path('admin.recipe.index', {page: page + 1})}}" >Suivant</a>
+                     </div>
+                {% endif %}
+            </div>
 	</div>
 {% endblock %}

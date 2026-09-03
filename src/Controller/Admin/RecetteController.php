@@ -19,21 +19,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 #[Route("/admin/recipe", name: "admin.recipe.")]
-#[IsGranted('ROLE_ADMIN')  ]
+#[IsGranted('ROLE_ADMIN')]
 
 final class RecetteController extends AbstractController
 {
     #[Route('/', name: 'index')]
     // #[IsGranted('ROLE_USER')]
-    public function index(RecipeRepository $repository, EntityManagerInterface $em): Response
+    public function index(RecipeRepository $repository, EntityManagerInterface $em, Request $request): Response
     {
 
         // $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $recipes = $repository->findAll();
+        $page = $request->query->get('page', 1);
+        $limit = 2 ;
+        $recipes = $repository->paginateRecipe($page, $limit);
 
+
+        $Maxpage = ceil($recipes->count() / $limit);
         return $this->render('Admin/recette/index.html.twig', [
-            "recipes" => $recipes
+            "recipes" => $recipes,
+            "maxPage" => $Maxpage,
+            "page"=> $page
         ]);
     }
 
@@ -120,7 +126,7 @@ final class RecetteController extends AbstractController
             [
                 'form' => $form,
                 'recipe' => $recipe,
-                'url'=> $imageUrl
+                'url' => $imageUrl
             ]
         );
     }
