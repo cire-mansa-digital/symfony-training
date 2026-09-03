@@ -5,18 +5,22 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route(path: "admin/category", name: "admin.category.")]
+#[IsGranted('ROLE_ADMIN')]
 final class CategoryController extends AbstractController
 {
     #[Route('/', name: 'index')]
     public function index(EntityManagerInterface $em): Response
     {
+        // $this->denyAccessUnlessGranted('ROLE_USER');
+
         $category = $em->getRepository(Category::class)->findAll();
 
         return $this->render('admin/category/index.html.twig', [
@@ -27,6 +31,7 @@ final class CategoryController extends AbstractController
     #[Route(path: '/new', name: 'new')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
+
         $category = new Category();
         $form =  $this->createForm(CategoryType::class, $category);
 

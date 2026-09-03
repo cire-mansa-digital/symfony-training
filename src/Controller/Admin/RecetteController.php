@@ -2,43 +2,35 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
 use App\Entity\Recipe;
+use App\Entity\Category;
 use App\Form\RecipeType;
-use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManager;
+use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 
 #[Route("/admin/recipe", name: "admin.recipe.")]
+#[IsGranted('ROLE_ADMIN')  ]
+
 final class RecetteController extends AbstractController
 {
     #[Route('/', name: 'index')]
+    // #[IsGranted('ROLE_USER')]
     public function index(RecipeRepository $repository, EntityManagerInterface $em): Response
     {
+
+        // $this->denyAccessUnlessGranted('ROLE_USER');
+
         $recipes = $repository->findAll();
-
-        // $category = $em->getRepository(Category::class)->findAll()[1];
-        $rec = $em->getRepository(Recipe::class)->find(5);
-
-        // $rec->setCategory($category);
-
-        // $em->persist($rec);
-        // $em->flush();
-
-        // dd($rec->getCategory()->getName());
-
-
-
-
-
 
         return $this->render('Admin/recette/index.html.twig', [
             "recipes" => $recipes
