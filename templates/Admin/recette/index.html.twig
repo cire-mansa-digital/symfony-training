@@ -21,7 +21,10 @@
 				<thead class="bg-linear-to-r from-amber-500 to-orange-500">
 					<tr>
 						<th scope="col" class="px-6 py-4 text-left text-sm font-semibold  uppercase tracking-wider">
-							Recette
+						  {{ knp_pagination_sortable(recipes, 'ID', 'r.id') }}
+						</th>
+						<th scope="col" class="px-6 py-4 text-left text-sm font-semibold  uppercase tracking-wider">
+							{{knp_pagination_sortable(recipes, 'Recette', 'r.title')}}
 						</th>
 						<th scope="col" class="px-6 py-4 text-left text-sm font-semibold  uppercase tracking-wider">
 							catégorie
@@ -37,6 +40,9 @@
 				<tbody class="bg-white divide-y divide-gray-200">
 					{% for recipe in recipes %}
 						<tr class="hover:bg-amber-50 transition duration-200">
+							<td class="px-6 py-4 whitespace-nowrap">
+								{{ recipe.id }}
+							</td>
 							<td class="px-6 py-4 whitespace-nowrap">
 								<a href="{{ path('admin.recipe.show', {slug: recipe.slug, id: recipe.id}) }}" class="text-lg font-medium text-gray-900 hover:text-amber-600 hover:underline transition">
 									{{ recipe.title }}
@@ -82,17 +88,6 @@
 
 		</div>
 
-            <div class="flex justify-between " >
-                {% if page > 1 %}
-                     <div>
-                        <a class="" href="{{path('admin.recipe.index', {page: page - 1})}}" >Précendent</a>
-                     </div>
-                {% endif %}
-                {% if page < maxPage %}
-                     <div>
-                        <a href="{{path('admin.recipe.index', {page: page + 1})}}" >Suivant</a>
-                     </div>
-                {% endif %}
-            </div>
+           {{ knp_pagination_render(recipes) }}
 	</div>
 {% endblock %}

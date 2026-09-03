@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\DTO\CategoryWithNombre;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Category>
@@ -40,4 +41,23 @@ class CategoryRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+        /**
+         * Method findWithNombre
+         *
+         * @return CategoryWithNombre[]
+         */
+        public function findWithNombre() : array{
+
+          return $this->createQueryBuilder('c')
+          ->select(' NEW App\\DTO\\CategoryWithNombre(c.id , c.name , c.slug , COUNT(c.id) ) ')
+          ->leftJoin('c.recipes','r')
+          ->groupBy('c.id')
+          ->getQuery()
+          ->getResult()
+          ;
+
+        }
+
 }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Recipe;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -13,7 +14,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class RecipeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry ,private PaginatorInterface $paginator)
     {
         parent::__construct($registry, Recipe::class);
     }
@@ -55,17 +56,24 @@ class RecipeRepository extends ServiceEntityRepository
             //  ->setParameter("cat",'dessert-au-repo')
             ->setMaxResults(2)
             ->getQuery()
-            ->getResult();
+            ->getResult();     
     }
 
-    public function  paginateRecipe(int $page, int $limit): Paginator
+    public function  paginateRecipe(int $page)
     {
 
-        $query = $this->createQueryBuilder('r')
-            ->setFirstResult(($page - 1)* $limit)
-            ->setMaxResults($limit);
+        $query = $this->createQueryBuilder("r");
 
-        return  new Paginator($query);
+        return $this->paginator->paginate($query,$page,2, [
+            "sortFieldAllowList" => ['r.id', 'r.title']
+        ]);
+
+
+        // $query = $this->createQueryBuilder('r')
+        //     ->setFirstResult(($page - 1)* $limit)
+        //     ->setMaxResults($limit);
+
+        // return  new Paginator($query);
     }
 
     public function totalDuration()

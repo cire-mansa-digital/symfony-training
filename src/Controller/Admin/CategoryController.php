@@ -21,7 +21,11 @@ final class CategoryController extends AbstractController
     {
         // $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $category = $em->getRepository(Category::class)->findAll();
+
+        // $category = $em->getRepository(Category::class)->findAll();
+        $category = $em->getRepository(Category::class)->findWithNombre();
+
+        // dd($category);
 
         return $this->render('admin/category/index.html.twig', [
             'category' => $category,
