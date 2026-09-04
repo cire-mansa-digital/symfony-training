@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Routing\Requirement\Requirement as RoutingRequirement;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -24,6 +25,7 @@ class Category
         max: 200,
     )]
     #[ORM\Column(length: 255)]
+    #[Groups('recipe_show')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]

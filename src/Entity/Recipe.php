@@ -6,8 +6,10 @@ use App\Repository\RecipeRepository;
 use App\Validator\BadRecette;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
@@ -22,23 +24,28 @@ class Recipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('recipe_index')]
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
     #[Assert\Length(min: 3)]
     #[BadRecette()]
+    #[Groups(['recipe_show', 'recipe_new', 'recipe_index'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Regex('/^[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*$/', " Le slug est invalide ")]
+    #[Groups(['recipe_show', 'recipe_new', 'recipe_index'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['recipe_show', 'recipe_new'])]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     // #[Assert\Positive(message:'la dure doit etre positive')]
     // #[Assert\LessThan(value:'1140', message: 'la duree maximale est 24h')]
+    #[Groups(['recipe_show', 'recipe_new', 'recipe_index'])]
     private ?int $duration = null;
 
     #[ORM\Column]
@@ -48,6 +55,7 @@ class Recipe
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[Groups('recipe_show')]
     private ?Category $category = null;
 
     #[ORM\Column(length: 255, nullable: true)]
