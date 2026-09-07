@@ -56,13 +56,17 @@ class RecipeRepository extends ServiceEntityRepository
             //  ->setParameter("cat",'dessert-au-repo')
             ->setMaxResults(2)
             ->getQuery()
-            ->getResult();     
+            ->getResult();
     }
 
-    public function  paginateRecipe(int $page)
+    public function  paginateRecipe(int $page, ?int $userId)
     {
 
         $query = $this->createQueryBuilder("r");
+        if ($userId) {
+           $query = $query->andWhere("r.ruser=:user")
+              ->setParameter("user", $userId);
+        }
 
         return $this->paginator->paginate($query,$page,2, [
             "sortFieldAllowList" => ['r.id', 'r.title']

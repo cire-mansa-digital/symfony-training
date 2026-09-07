@@ -1,13 +1,17 @@
 <?php
 
+
+
 namespace App\Controller\Admin;
 
 use App\Entity\Recipe;
 use App\Entity\Category;
 use App\Form\RecipeType;
 use Doctrine\ORM\EntityManager;
+use App\Security\Voter\RecipeVoter;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,23 +20,32 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
-
 #[Route("/admin/recipe", name: "admin.recipe.")]
-#[IsGranted('ROLE_ADMIN')]
+// #[IsGranted('ROLE_ADMIN')]
+
 
 final class RecetteController extends AbstractController
 {
     #[Route('/', name: 'index')]
     // #[IsGranted('ROLE_USER')]
-    public function index(RecipeRepository $repository, EntityManagerInterface $em, Request $request): Response
+    #[IsGranted(RecipeVoter::LIST)]
+    public function index(RecipeRepository $repository, EntityManagerInterface $em, Request $request, Security $security): Response
     {
 
         // $this->denyAccessUnlessGranted('ROLE_USER');
+        // dd($security);
+        $cantAll = $security->isGranted(RecipeVoter::LIST_ALL);
+
+
+
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+
 
         $page = $request->query->get('page', 1);
 
-        $recipes = $repository->paginateRecipe($page);
+        $recipes = $repository->paginateRecipe($page, $cantAll? null : $user->getId());
 
 
         return $this->render('Admin/recette/index.html.twig', [
@@ -57,6 +70,7 @@ final class RecetteController extends AbstractController
 
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted(RecipeVoter::CREATE)]
     public function create(Request $request, EntityManagerInterface $em)
     {
 
@@ -92,6 +106,7 @@ final class RecetteController extends AbstractController
 
 
     #[Route(path: '{id}/edit', name: 'edit', methods: ['POST', 'PATCH', 'GET'])]
+    #[IsGranted(RecipeVoter::EDIT, subject: 'recipe')]
     public function edit(Request $request, Recipe $recipe, EntityManagerInterface $em, UploaderHelper $uploaderHelper)
     {
 
