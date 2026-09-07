@@ -66,6 +66,9 @@ class Recipe
 
     private ?File $imageFile = null;
 
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    private ?User $ruser = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -179,6 +182,18 @@ class Recipe
     public function setImageFile(File $imageFile) : static
     {
         $this->imageFile = $imageFile;
+
+        return $this;
+    }
+
+    public function getRuser(): ?User
+    {
+        return $this->ruser;
+    }
+
+    public function setRuser(?User $ruser): static
+    {
+        $this->ruser = $ruser;
 
         return $this;
     }
