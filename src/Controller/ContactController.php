@@ -4,19 +4,22 @@ namespace App\Controller;
 
 use App\DTO\ContactDTO;
 use App\Form\ContactType;
+use Symfony\Component\Mime\Email;
+use App\Event\ContactRequestEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'contact')]
-    public function index(Request $request, MailerInterface $mailer): Response
+    public function index(Request $request, MailerInterface $mailer, EventDispatcherInterface $dispatcher): Response
     {
         $contact = new ContactDTO();
         $contact->email =  '';
@@ -29,20 +32,12 @@ final class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // dd($form);
-            $mail = new TemplatedEmail()
-                ->from($contact->service)
-                ->to($contact->email)
-                ->subject("Demande de contact")
-                ->context(['data' => $contact])
-                ->htmlTemplate('emails/contact.html.twig')
-
-                ;
             try {
 
-                $mailer->send($mail);
+               $dispatcher->dispatch(new ContactRequestEvent($contact));
                 $this->addFlash("success", "Email envoyer avec success");
                 return $this->redirectToRoute("contact");
-            } catch (\Throwable $th) {
+            } catch (\Exception $th) {
                 $this->addFlash("error", $th->getMessage());
             }
         }

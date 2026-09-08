@@ -68,7 +68,7 @@ class RecipeRepository extends ServiceEntityRepository
               ->setParameter("user", $userId);
         }
 
-        return $this->paginator->paginate($query,$page,2, [
+        return $this->paginator->paginate($query,$page,4, [
             "sortFieldAllowList" => ['r.id', 'r.title']
         ]);
 
