@@ -8,6 +8,7 @@ use App\Entity\Recipe;
 use App\Entity\Category;
 use App\Form\RecipeType;
 use Doctrine\ORM\EntityManager;
+use Symfony\UX\Turbo\TurboBundle;
 use App\Security\Voter\RecipeVoter;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -146,8 +147,14 @@ final class RecetteController extends AbstractController
     #[Route(path: "{id}/delete", name: 'delete', methods: ['DELETE'])]
     public function delete(Request $request, Recipe $recipe, EntityManagerInterface $em)
     {
+         $id = $recipe->getId();
+         $message = "Recette supprimé avec succes";
         $em->remove($recipe);
         $em->flush();
+         if ($request->getPreferredFormat()== TurboBundle::STREAM_FORMAT  ) {
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+            return $this->render('Admin/recette/delete.html.twig',['recipe_id'=> $id, 'message'=> $message]);
+         }
         $this->addFlash('success', 'Recette supprimé avec succes');
         return $this->redirectToRoute('admin.recipe.index');
     }

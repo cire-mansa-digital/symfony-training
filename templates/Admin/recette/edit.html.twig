@@ -36,8 +36,9 @@
 
                 {# Corps du formulaire #}
                 <div class="px-8 py-8">
+                    <turbo-frame id ="recipe_{{recipe.id}}">
 
-                    {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
+                    {{ form_start(form, { attr: { class: 'space-y-6' }, action: path('admin.recipe.edit',{id:recipe.id}) }) }}
 
                     {# Champ Titre #}
                     <div>
@@ -115,7 +116,7 @@
                     </div>
 
                     {{ form_end(form) }}
-
+             </turbo-frame>
                 </div> {# fin div.px-8.py-8 #}
             </div> {# fin carte #}
 

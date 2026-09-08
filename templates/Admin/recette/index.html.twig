@@ -11,6 +11,9 @@
 		<p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
 			Découvrez toutes vos recettes préférées. Cliquez sur une recette pour la voir en détail.
 		</p>
+        <div id="flash">
+
+        </div>
 		<div class="mt-8 text-center flex  mb-2">
 			<a href="{{ path('admin.recipe.new') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition shadow-lg">
 				Créer une nouvelle recette
@@ -39,14 +42,16 @@
 				</thead>
 				<tbody class="bg-white divide-y divide-gray-200">
 					{% for recipe in recipes %}
-						<tr class="hover:bg-amber-50 transition duration-200">
+						<tr id="row_recipe_{{recipe.id}}" class="hover:bg-amber-50 transition duration-200">
 							<td class="px-6 py-4 whitespace-nowrap">
 								{{ recipe.id }}
 							</td>
 							<td class="px-6 py-4 whitespace-nowrap">
+
 								<a href="{{ path('admin.recipe.show', {slug: recipe.slug, id: recipe.id}) }}" class="text-lg font-medium text-gray-900 hover:text-amber-600 hover:underline transition">
 									{{ recipe.title }}
 								</a>
+
 							</td>
 							<td class="px-6 py-4 whitespace-nowrap">
 								<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
@@ -62,9 +67,11 @@
 							</td>
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="flex items-center gap-4">
+                                    <turbo-frame id ="recipe_{{recipe.id}}">
 									<a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}" class="inline-flex  items-center gap-1 px-3 py-1.5 bg-blue-500  text-sm font-medium rounded-lg hover:bg-blue-600 transition shadow-sm">
 										Modifier
 									</a>
+                                                 </turbo-frame>
 									<form action=" {{ path("admin.recipe.delete", {id:recipe.id}) }} " method="post" >
                                         <input hidden name="_method" value="DELETE" ></input>
 										<button onclick="return confirm('Supprimer cette recette ?')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-500  text-sm font-medium rounded-lg hover:bg-red-600 transition shadow-sm">
