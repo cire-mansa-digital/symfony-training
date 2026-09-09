@@ -17,12 +17,14 @@ use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Regex;
+
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Sequentially;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;;
 
 
 class RecipeType extends AbstractType
@@ -30,11 +32,11 @@ class RecipeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class,[
-                'label'=> 'titre'
+            ->add('title', TextType::class, [
+                'label' => 'titre'
             ])
-            ->add('slug' , TextType::class, [
-              'required'=>false,
+            ->add('slug', TextType::class, [
+                'required' => false,
             ])
             ->add('content')
             ->add('duration')
@@ -45,31 +47,49 @@ class RecipeType extends AbstractType
 
             // ])
             ->add('category', CategoryAutocompleteField::class)
-            ->add('imageFile', FileType::class,[
+            ->add('imageFile', FileType::class, [
                 'required' => false,
             ])
-            ->add('Ajouter', SubmitType::class, [
-                'label'=> 'Enregistrer'
+            ->add('quantities', CollectionType::class, [
+                'entry_type' => QuantityType::class,
+                'by_reference' => false,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'attr' => [
+                    'data-controller' => 'form-collection',
+                    'data-form-collection-add-label-value' => 'Ajouter',
+                    'data-form-collection-delete-label-value' => 'Supprimer'
+                ]
+
             ])
+            ->add('Ajouter', SubmitType::class, [
+                'label' => 'Enregistrer'
+            ])
+
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...))
-            ->addEventListener(FormEvents::POST_SUBMIT , $this->creupdate(...));
-        ;
+            ->addEventListener(FormEvents::POST_SUBMIT, $this->creupdate(...));;
     }
 
-    public function autoSlug( PreSubmitEvent $event ){
-       $data = $event->getData();
-    //    dd($data);
-    if( empty($data['slug']) ){
-        $slugger =  new AsciiSlugger();
-       $data['slug'] = $slugger->slug($data['title'])->lower()->toString() ;
-       $event->setData($data);
-    }
+    public function autoSlug(PreSubmitEvent $event)
+    {
+        $data = $event->getData();
 
+        if (!$data) {
+            return;
+        }
+
+        if (empty($data['slug']) && !empty($data['title'])) {
+            $slugger = new AsciiSlugger();
+            $data['slug'] = $slugger->slug($data['title'])->lower()->toString();
+            $event->setData($data);
+        }
     }
-    public function creupdate(PostSubmitEvent $event){
-        $data= $event->getData();
-        if(!($data instanceof Recipe)){
-            return ;
+    public function creupdate(PostSubmitEvent $event)
+    {
+        $data = $event->getData();
+        if (!($data instanceof Recipe)) {
+            return;
         }
         $data->setUpdateAt(new DateTimeImmutable);
         if (!$data->getId()) {

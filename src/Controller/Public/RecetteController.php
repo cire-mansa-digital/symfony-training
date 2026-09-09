@@ -48,7 +48,7 @@ final class RecetteController extends AbstractController
     {
 
         $recipe = $repository->find($id);
-        if ($recipe->getSlug() != $slug) {
+        if ($recipe->getSlug() != $slug ) {
             return $this->redirectToRoute('recipe.show', ['id' => $id, 'slug' => $recipe->getSlug()]);
         }
 
