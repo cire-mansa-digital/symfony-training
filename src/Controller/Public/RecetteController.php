@@ -20,25 +20,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class RecetteController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(RecipeRepository $repository, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, Security $security): Response
+    public function index(Request $request, RecipeRepository $repository): Response
     {
-        $user =  new User();
-        // $user->setUsername('cire')
-        // ->setEmail('cire@gmail.com')
-        // ->setRoles([])
-        // ->setPassword($hasher->hashPassword($user,'0000'))
-        // ;
-
-        // $em->persist($user);
-        // $em->flush();
-
-        // dd($user);
-
-        // dd($security->getToken());
-        $recipes = $repository->findAll();
+        $page = $request->query->getInt('page', 1);
+        $recipes = $repository->paginatePublicRecipes($page, 9);
 
         return $this->render('Public/recette/index.html.twig', [
-            "recipes" => $recipes
+            'recipes' => $recipes
         ]);
     }
 

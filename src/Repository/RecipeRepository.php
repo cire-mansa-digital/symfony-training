@@ -59,25 +59,30 @@ class RecipeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function  paginateRecipe(int $page, ?int $userId)
+    public function paginateRecipe(int $page, ?int $userId, int $limit = 4)
     {
-
         $query = $this->createQueryBuilder("r");
         if ($userId) {
            $query = $query->andWhere("r.ruser=:user")
               ->setParameter("user", $userId);
         }
 
-        return $this->paginator->paginate($query,$page,4, [
+        return $this->paginator->paginate($query, $page, $limit, [
             "sortFieldAllowList" => ['r.id', 'r.title']
         ]);
+    }
 
+    public function paginatePublicRecipes(int $page, int $limit = 9)
+    {
+        $query = $this->createQueryBuilder('r')
+            ->leftJoin('r.category', 'c')
+            ->addSelect('c')
+            ->orderBy('r.createdAt', 'DESC');
 
-        // $query = $this->createQueryBuilder('r')
-        //     ->setFirstResult(($page - 1)* $limit)
-        //     ->setMaxResults($limit);
-
-        // return  new Paginator($query);
+        return $this->paginator->paginate($query, $page, $limit, [
+            'distinct' => true,
+            'sortFieldAllowList' => ['r.id', 'r.title', 'r.duration', 'r.createdAt']
+        ]);
     }
 
     public function totalDuration()
