@@ -80,6 +80,7 @@ final class RecetteController extends AbstractController
 
 
         $recipe =  new Recipe();
+        $recipe->setRuser($this->getUser());
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

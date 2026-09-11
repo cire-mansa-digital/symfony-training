@@ -7,118 +7,96 @@
 {% block body %}
     <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-16">
         <div class="max-w-4xl mx-auto">
-
             {# En-tête #}
-            <div class="text-center mb-2">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">
-                    Créer une nouvelle recette
-                </h1>
-                <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">
-                    Partagez votre recette avec la communauté. Remplissez tous les champs et laissez parler votre créativité !
-                </p>
+            <div class="text-center mb-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">Créer une nouvelle recette</h1>
+                <p class="mt-2 text-lg text-gray-600">Partagez votre recette avec la communauté.</p>
             </div>
 
-            {# Lien retour vers la liste #}
-            <div class="mb-2">
-                <a href="{{ path('admin.recipe.index') }}"
-                    class="text-amber-600 hover:text-amber-800 transition font-medium">
+            <div class="mb-4">
+                <a href="{{ path('admin.recipe.index') }}" class="text-amber-600 hover:text-amber-800 transition font-medium">
                     ← Retour à la liste des recettes
                 </a>
             </div>
-            {# Carte du formulaire #}
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
 
-                {# En-tête de la carte avec dégradé #}
-                <div class="bg-linear-to-r from-amber-600 to-orange-500 px-8 py-4">
-                    <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
-                        Nouvelle recette
-                    </h2>
+            {# Carte Formulaire #}
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-amber-600 to-orange-500 px-8 py-4">
+                    <h2 class="text-2xl font-semibold text-white">Nouvelle recette</h2>
                 </div>
 
-                {# Corps du formulaire #}
                 <div class="px-8 py-8">
-
                     {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
 
-                    {# Champ Titre #}
+                    {# Titre #}
                     <div>
                         {{ form_label(form.title, 'Titre de la recette', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
-                        {{ form_widget(form.title, { attr: {
-                        class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
-                        placeholder: 'Ex: Omelette aux légumes...'
-                        } }) }}
-                        {{ form_errors(form.title, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+                        {{ form_widget(form.title, { attr: { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 transition', placeholder: 'Ex: Omelette aux légumes...' } }) }}
+                        {{ form_errors(form.title) }}
                     </div>
+
+                    {# Slug & Durée #}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                         <div>
-                            {{ form_label(form.slug, 'Slug ', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
-                            <div class="relative">
-                                {{ form_widget(form.slug, { attr: {
-                                class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition bg-gray-50',
-                                placeholder: 'auto-génération possible',
-                                } }) }}
-                            </div>
-                            {{ form_errors(form.slug, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+                            {{ form_label(form.slug, 'Slug', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                            {{ form_widget(form.slug, { attr: { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 transition bg-gray-50', placeholder: 'Auto-généré si vide' } }) }}
+                            {{ form_errors(form.slug) }}
                         </div>
-
-
                         <div>
                             {{ form_label(form.duration, 'Durée (en minutes)', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
-                            {{ form_widget(form.duration, { attr: {
-                            class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
-                            placeholder: 'Ex: 15',
-                            min: 1
-                            } }) }}
-                            {{ form_errors(form.duration, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+                            {{ form_widget(form.duration, { attr: { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 transition', placeholder: 'Ex: 15' } }) }}
+                            {{ form_errors(form.duration) }}
                         </div>
                     </div>
 
-                    {# Champ Contenu (textarea) #}
+                    {# Contenu #}
                     <div>
                         {{ form_label(form.content, 'Contenu de la recette', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
-                        {{ form_widget(form.content, { attr: {
-                        class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
-                        rows: 8,
-                        placeholder: 'Décrivez les étapes, les ingrédients, les astuces...'
-                        } }) }}
-                        {{ form_errors(form.content, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
-                    </div>
-                    <div>
-                        {{ form_label(form.category, 'Catégorie de la Recette', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
-                        {{ form_widget(form.category, { attr: {
-                        class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition',
-                        placeholder: 'Selectionner la catégorie de la recette'
-                        } }) }}
-                        {{ form_errors(form.category, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
+                        {{ form_widget(form.content, { attr: { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 transition', rows: 6 } }) }}
+                        {{ form_errors(form.content) }}
                     </div>
 
-                    <div>
-                        {{ form_label(form.imageFile, 'Photo de la recette', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
-                        {{ form_widget(form.imageFile, {attr:  { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition' }}) }}
-                        {{ form_help(form.imageFile, { attr: { class: 'text-sm text-gray-500 mt-1' } }) }}
-                        {{ form_errors(form.imageFile, { attr: { class: 'text-red-600 text-sm mt-1' } }) }}
-
-
+                    {# Catégorie & Image #}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            {{ form_label(form.category, 'Catégorie', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                            {{ form_widget(form.category, { attr: { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 transition' } }) }}
+                            {{ form_errors(form.category) }}
+                        </div>
+                        <div>
+                            {{ form_label(form.imageFile, 'Photo de la recette', { label_attr: { class: 'block text-sm font-medium text-gray-700 mb-1' } }) }}
+                            {{ form_widget(form.imageFile, { attr: { class: 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 transition' } }) }}
+                            {{ form_errors(form.imageFile) }}
+                        </div>
                     </div>
 
+                    {# COLLECTION QUANTITÉS #}
+                    <div class="border-t border-gray-200 pt-6">
+                        <label class="block text-lg font-semibold text-gray-800 mb-3">Ingrédients & Quantités</label>
 
-                    {# Bouton d'envoi #}
-                    <div class="flex justify-end pt-4">
-                        {{ form_widget(form.Ajouter, {
-                        label: 'Publier la recette',
-                        attr: {
-                        class: 'inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-500 text-white font-semibold rounded-full shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5'
-                        }
-                        }) }}
+                        <div data-controller="form-collection"
+                            data-form-collection-add-label-value="Ajouter un ingrédient"
+                            data-form-collection-delete-label-value="Supprimer"
+                            data-prototype="{{ form_widget(form.quantities.vars.prototype)|e('html_attr') }}"
+                            class="space-y-4">
+
+                            {% for quantityForm in form.quantities %}
+                                <div class="collection-item p-4 bg-gray-50 rounded-xl border border-gray-200 shadow-sm relative">
+                                    {{ form_widget(quantityForm) }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% do form.quantities.setRendered() %}
+                    </div>
+
+                    {# Soumission #}
+                    <div class="flex justify-end pt-6 border-t border-gray-100">
+                        {{ form_widget(form.Ajouter, { label: 'Publier la recette', attr: { class: 'px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-500 text-white font-semibold rounded-full shadow-md hover:shadow-lg transition cursor-pointer' } }) }}
                     </div>
 
                     {{ form_end(form) }}
-
-                </div> {# fin div.px-8.py-8 #}
-            </div> {# fin carte #}
-
-
-        </div> {# fin max-w-4xl #}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

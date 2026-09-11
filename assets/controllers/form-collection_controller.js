@@ -18,7 +18,7 @@ export default class extends Controller {
         if (!this.element.querySelector(".btn-add-collection")) {
             const btn = document.createElement("button");
             btn.setAttribute("type", "button");
-            btn.className = "btn-add-collection inline-flex items-center gap-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg shadow-sm transition cursor-pointer text-sm mt-3";
+            btn.className = " inline-flex items-center gap-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg shadow-sm transition cursor-pointer text-sm mt-3";
             btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> <span>${this.addLabelValue || "Ajouter un ingrédient"}</span>`;
             btn.addEventListener("click", this.addCollectionElement);
 

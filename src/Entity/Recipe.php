@@ -76,7 +76,7 @@ class Recipe
     /**
      * @var Collection<int, Quantity>
      */
-    #[ORM\OneToMany(targetEntity: Quantity::class, mappedBy: 'recipe', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Quantity::class, mappedBy: 'recipe', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[Assert\Valid]
     private Collection $quantities;
 

@@ -56,12 +56,6 @@ class RecipeType extends AbstractType
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'attr' => [
-                    'data-controller' => 'form-collection',
-                    'data-form-collection-add-label-value' => 'Ajouter',
-                    'data-form-collection-delete-label-value' => 'Supprimer'
-                ]
-
             ])
             ->add('Ajouter', SubmitType::class, [
                 'label' => 'Enregistrer'

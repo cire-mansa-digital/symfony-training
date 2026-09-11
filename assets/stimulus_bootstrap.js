@@ -1,9 +1,10 @@
 import { startStimulusApp } from '@symfony/stimulus-bridge';
+import FormCollectionController from './controllers/form-collection_controller.js';
 
-// Registers Stimulus controllers from controllers.json and in the controllers/ directory
 export const app = startStimulusApp(import.meta.webpackContext('@symfony/stimulus-bridge/lazy-controller-loader!./controllers', {
     recursive: true,
-    regExp: /\.[jt]sx?$/,
+    regExp: /\.([jt])sx?$/,
 }));
-// register any custom, 3rd party controllers here
-// app.register('some_controller_name', SomeImportedController);
+
+// Enregistrement manuel du contrôleur
+app.register('form-collection', FormCollectionController);
