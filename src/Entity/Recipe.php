@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use PHPUnit\Framework\Attributes\Group;
+use Gedmo\Mapping\Annotation\Translatable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -33,6 +34,7 @@ class Recipe
     #[Assert\Length(min: 3)]
     #[BadRecette()]
     #[Groups(['recipe_show', 'recipe_new', 'recipe_index'])]
+    #[Translatable]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -90,7 +92,7 @@ class Recipe
 
     public function getTitle(): ?string
     {
-        return $this->title;
+        return $this->title ?? '';
     }
 
     public function setTitle(string $title): static

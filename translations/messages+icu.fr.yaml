@@ -1,0 +1,1 @@
+recipe_count: "{count, plural,\n    =0    {Aucune}\n    =1    {Une recette}\n    other {# recettes}\n}"

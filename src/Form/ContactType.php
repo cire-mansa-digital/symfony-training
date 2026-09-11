@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\DTO\ContactDTO;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use function Symfony\Component\Translation\t;
 
 class ContactType extends AbstractType
 {
@@ -17,11 +19,13 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('name',TextType::class, [
-                'label'=> 'Nom'
+                'label'=> t('contactForm.name')
             ])
-            ->add('email')
+            ->add('email',EmailType::class, [
+                'label'=> t('contactForm.email')
+            ])
             ->add('service',  ChoiceType::class, [
-                'label'=> 'Services ',
+                'label'=> t('contactForm.services'),
                 'choices'=> [
                     'compta'=> 'compta@gmail.com',
                     'marketing'=> 'marketign@gmail.com',
@@ -30,12 +34,12 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('message', TextareaType::class,[
-                'label'=> 'Message',
+                'label'=> t('contactForm.messages'),
                 'empty_data'=> '',
 
             ])
             ->add('save', SubmitType::class, [
-                'label'=> 'Envoyer'
+                'label'=> t('contactForm.submit')
             ])
         ;
     }
@@ -46,4 +50,6 @@ class ContactType extends AbstractType
             'data_class' => ContactDTO::class,
         ]);
     }
+
+
 }

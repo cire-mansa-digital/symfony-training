@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Translatable;
 use Symfony\Component\Routing\Requirement\Requirement as RoutingRequirement;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,6 +27,7 @@ class Category
     )]
     #[ORM\Column(length: 255)]
     #[Groups('recipe_show')]
+    #[Translatable]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -63,7 +65,7 @@ class Category
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
     public function setName(string $name): static

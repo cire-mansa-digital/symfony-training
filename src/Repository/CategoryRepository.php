@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\Query;
 use App\Entity\Category;
 use App\DTO\CategoryWithNombre;
 use Doctrine\Persistence\ManagerRegistry;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -53,8 +55,9 @@ class CategoryRepository extends ServiceEntityRepository
           return $this->createQueryBuilder('c')
           ->select(' NEW App\\DTO\\CategoryWithNombre(c.id , c.name , c.slug , COUNT(c.id) ) ')
           ->leftJoin('c.recipes','r')
-          ->groupBy('c.id')
+          ->groupBy('c.id', 'c.name', 'c.slug')
           ->getQuery()
+          ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER,TranslationWalker::class)
           ->getResult()
           ;
 
